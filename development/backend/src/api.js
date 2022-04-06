@@ -5,7 +5,7 @@ const jimp = require('jimp');
 
 const mysql = require('mysql2/promise');
 
-const linkedUserIdCache = {};
+// const linkedUserIdCache = {};
 
 const mysqlOption = {
   host: 'mysql',
@@ -28,9 +28,9 @@ const mylog = (obj) => {
 const getLinkedUser = async (headers) => {
   const target = headers['x-app-key'];
 
-  if (linkedUserIdCache[target]) {
-    return { user_id: linkedUserIdCache[target] }
-  }
+  // if (linkedUserIdCache[target]) {
+  //   return { user_id: linkedUserIdCache[target] }
+  // }
 
   // mylog(target);
   const qs = `select * from session where value = ?`;
@@ -42,7 +42,7 @@ const getLinkedUser = async (headers) => {
     return undefined;
   }
 
-  linkedUserIdCache[target] = rows[0].linked_user_id;
+  // linkedUserIdCache[target] = rows[0].linked_user_id;
 
   return { user_id: rows[0].linked_user_id };
 };

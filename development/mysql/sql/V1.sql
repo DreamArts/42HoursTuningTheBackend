@@ -1,0 +1,1 @@
+create index session_idx on session (value);
