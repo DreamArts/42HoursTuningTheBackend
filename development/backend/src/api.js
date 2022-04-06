@@ -862,7 +862,7 @@ const postFiles = async (req, res) => {
   }
 
   const base64Data = req.body.data;
-  mylog(base64Data);
+  // mylog(base64Data);
 
   const name = req.body.name;
 
