@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const { v4: uuidv4 } = require('uuid');
 
 const jimp = require('jimp');
@@ -871,9 +871,9 @@ const postFiles = async (req, res) => {
 
   const binary = Buffer.from(base64Data, 'base64');
 
-  fs.writeFileSync(`${filePath}${newId}_${name}`, binary);
+  await fs.writeFile(`${filePath}${newId}_${name}`, binary);
 
-  const image = await jimp.read(fs.readFileSync(`${filePath}${newId}_${name}`));
+  const image = await jimp.read(binary);
   mylog(image.bitmap.width);
   mylog(image.bitmap.height);
 
@@ -931,7 +931,7 @@ const getRecordItemFile = async (req, res) => {
 
   const fileInfo = rows[0];
 
-  const data = fs.readFileSync(fileInfo.path);
+  const data = await fs.readFile(fileInfo.path);
   const base64 = data.toString('base64');
   mylog(base64);
 
@@ -973,7 +973,7 @@ const getRecordItemFileThumbnail = async (req, res) => {
 
   const fileInfo = rows[0];
 
-  const data = fs.readFileSync(fileInfo.path);
+  const data = await fs.readFile(fileInfo.path);
   const base64 = data.toString('base64');
   mylog(base64);
 
