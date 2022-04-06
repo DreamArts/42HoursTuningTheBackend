@@ -11,6 +11,9 @@ services:
           - target: 80
             published: 8080
             protocol: tcp
+          - target: 3306
+            published: 3306
+            protocol: tcp
       volumes:
         - /da/tls:/etc/nginx/tls
     backend:
