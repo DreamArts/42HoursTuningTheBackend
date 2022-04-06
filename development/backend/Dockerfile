@@ -1,9 +1,9 @@
-FROM node:12-alpine
+FROM node:16-alpine
 WORKDIR /backend
 COPY src/ ./src
 COPY package.json package-lock.json ./
-RUN mkdir file
-RUN mkdir file/static
-RUN npm ci
+RUN mkdir file \
+  && mkdir file/static \
+  && npm ci --production
 
 ENTRYPOINT ["node", "src/index.js"]
