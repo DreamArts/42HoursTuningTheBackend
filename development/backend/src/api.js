@@ -1,6 +1,16 @@
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const log4js = require('log4js')
 
+log4js.configure({
+	appenders : {
+	system : {type : 'file', filename : 'system.log'}
+	},
+	categories : {
+	default : {appenders : ['system'], level : 'info'},
+	}
+});
+const logger = log4js.getLogger('system');
 const jimp = require('jimp');
 
 const mysql = require('mysql2/promise');
@@ -23,10 +33,12 @@ const mylog = (obj) => {
   if (Array.isArray(obj)) {
     for (const e of obj) {
       console.log(e);
+	  logger.info(e);
     }
     return;
   }
   console.log(obj);
+  logger.info(obj);
 };
 
 const getLinkedUser = async (headers) => {
