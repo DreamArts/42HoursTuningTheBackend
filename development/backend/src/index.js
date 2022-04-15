@@ -31,6 +31,7 @@ const mylog = (obj) => {
 
 app.get('/api/hello', (req, res) => {
   console.log('requested');
+  mylog("World")
   res.send({ response :'World!'})
 })
 
