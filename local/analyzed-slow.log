@@ -1,0 +1,293 @@
+Reading from STDIN ...
+
+# 5.3s user time, 90ms system time, 1.00k rss, 31.00k vsz
+# Current date: Sat Apr 16 04:22:14 2022
+# Hostname: dcee6b8dbab6
+# Files: STDIN
+# Overall: 9.08k total, 43 unique, 534.24 QPS, 0.59x concurrency _________
+# Time range: 2022-04-16T04:13:10 to 2022-04-16T04:13:27
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time            10s    10us    45ms     1ms     6ms     2ms   424us
+# Lock time           37ms       0   169us     4us     8us     5us     3us
+# Rows sent              9       0       1    0.00       0    0.03       0
+# Rows examine           9       0       1    0.00       0    0.03       0
+# Query size         4.81M       6   7.66k  554.83   3.88k   1.25k   88.31
+
+# Profile
+# Rank Query ID                       Response time Calls R/Call V/M   Ite
+# ==== ============================== ============= ===== ====== ===== ===
+#    1 0x7DFA2D5D9DBC803F79DB97773...  6.1400 61.0%  1726 0.0036  0.00 INSERT time_zone_transition
+#    2 0x93B0490C6027E6D67E3D4DA35...  1.4941 14.8%  1826 0.0008  0.00 INSERT time_zone_transition_type
+#    3 0x44EBC9974E0FE0B553B97C7B0...  0.8863  8.8%  1826 0.0005  0.00 INSERT time_zone_name
+#    4 0xAA83D87B5B11FC07C50163FB3...  0.7693  7.6%  1826 0.0004  0.00 INSERT time_zone
+#    5 0x98E1098203EF07827B5A8A396...  0.3229  3.2%  1826 0.0002  0.00 SET
+# MISC 0xMISC                          0.4543  4.5%    52 0.0087   0.0 <38 ITEMS>
+
+# Query 1: 107.88 QPS, 0.38x concurrency, ID 0x7DFA2D5D9DBC803F79DB97773EC5447B at byte 3868754
+# Scores: V/M = 0.00
+# Time range: 2022-04-16T04:13:10 to 2022-04-16T04:13:26
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         19    1726
+# Exec time     60      6s   322us    21ms     4ms     9ms     3ms     3ms
+# Lock time     21     8ms     2us    43us     4us     8us     3us     3us
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size    82   3.95M     155   7.66k   2.34k   6.31k   2.09k   1.96k
+# String:
+# Databases    mysql
+# Hosts        localhost
+# Users        root
+# Query_time distribution
+#   1us
+#  10us
+# 100us  #################################
+#   1ms  ################################################################
+#  10ms  ####
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `mysql` LIKE 'time_zone_transition'\G
+#    SHOW CREATE TABLE `mysql`.`time_zone_transition`\G
+INSERT INTO time_zone_transition (Time_zone_id, Transition_time, Transition_type_id) VALUES
+ (@time_zone_id, -2147483648, 1)
+,(@time_zone_id, -1441159324, 2)
+,(@time_zone_id, -1247536800, 3)
+,(@time_zone_id, -892522800, 6)
+,(@time_zone_id, -857257200, 4)
+,(@time_zone_id, -844556400, 5)
+,(@time_zone_id, -828226800, 4)
+,(@time_zone_id, -825382800, 3)
+,(@time_zone_id, 354920400, 7)
+,(@time_zone_id, 370728000, 3)
+,(@time_zone_id, 386456400, 7)
+,(@time_zone_id, 402264000, 3)
+,(@time_zone_id, 417992400, 7)
+,(@time_zone_id, 433800000, 3)
+,(@time_zone_id, 449614800, 7)
+,(@time_zone_id, 465346800, 8)
+,(@time_zone_id, 481071600, 9)
+,(@time_zone_id, 496796400, 8)
+,(@time_zone_id, 512521200, 9)
+,(@time_zone_id, 528246000, 8)
+,(@time_zone_id, 543970800, 9)
+,(@time_zone_id, 559695600, 8)
+,(@time_zone_id, 575420400, 9)
+,(@time_zone_id, 591145200, 8)
+,(@time_zone_id, 606870000, 9)
+,(@time_zone_id, 622594800, 8)
+,(@time_zone_id, 638319600, 9)
+,(@time_zone_id, 646783200, 10)
+,(@time_zone_id, 686102400, 2)
+,(@time_zone_id, 701820000, 10)
+,(@time_zone_id, 717541200, 2)
+,(@time_zone_id, 733269600, 10)
+,(@time_zone_id, 748990800, 2)
+,(@time_zone_id, 764719200, 10)
+,(@time_zone_id, 780440400, 2)
+,(@time_zone_id, 796179600, 11)
+,(@time_zone_id, 811904400, 12)
+,(@time_zone_id, 828234000, 11)
+,(@time_zone_id, 846378000, 12)
+,(@time_zone_id, 859683600, 11)
+,(@time_zone_id, 877827600, 12)
+,(@time_zone_id, 891133200, 11)
+,(@time_zone_id, 909277200, 12)
+,(@time_zone_id, 922582800, 11)
+,(@time_zone_id, 941331600, 12)
+,(@time_zone_id, 954032400, 11)
+,(@time_zone_id, 972781200, 12)
+,(@time_zone_id, 985482000, 11)
+,(@time_zone_id, 1004230800, 12)
+,(@time_zone_id, 1017536400, 11)
+,(@time_zone_id, 1035680400, 12)
+,(@time_zone_id, 1048986000, 11)
+,(@time_zone_id, 1067130000, 12)
+,(@time_zone_id, 1080435600, 11)
+,(@time_zone_id, 1099184400, 12)
+,(@time_zone_id, 1111885200, 11)
+,(@time_zone_id, 1130634000, 12)
+,(@time_zone_id, 1143334800, 11)
+,(@time_zone_id, 1162083600, 12)
+,(@time_zone_id, 1174784400, 11)
+,(@time_zone_id, 1193533200, 12)
+,(@time_zone_id, 1206838800, 11)
+,(@time_zone_id, 1224982800, 12)
+,(@time_zone_id, 1238288400, 11)
+,(@time_zone_id, 1256432400, 12)
+,(@time_zone_id, 1269738000, 11)
+,(@time_zone_id, 1288486800, 12)
+,(@time_zone_id, 1301187600, 11)
+,(@time_zone_id, 1319936400, 12)
+,(@time_zone_id, 1332637200, 11)
+,(@time_zone_id, 1351386000, 12)
+,(@time_zone_id, 1364691600, 11)
+,(@time_zone_id, 1382835600, 12)
+,(@time_zone_id, 1396141200, 11)
+,(@time_zone_id, 1414285200, 12)
+,(@time_zone_id, 1427590800, 11)
+,(@time_zone_id, 1445734800, 12)
+,(@time_zone_id, 1459040400, 11)
+,(@time_zone_id, 1477789200, 12)
+,(@time_zone_id, 1490490000, 11)
+,(@time_zone_id, 1509238800, 12)
+,(@time_zone_id, 1521939600, 11)
+,(@time_zone_id, 1540688400, 12)
+,(@time_zone_id, 1553994000, 11)
+,(@time_zone_id, 1572138000, 12)
+,(@time_zone_id, 1585443600, 11)
+,(@time_zone_id, 1603587600, 12)
+,(@time_zone_id, 1616893200, 11)
+,(@time_zone_id, 1635642000, 12)
+,(@time_zone_id, 1648342800, 11)
+,(@time_zone_id, 1667091600, 12)
+,(@time_zone_id, 1679792400, 11)
+,(@time_zone_id, 1698541200, 12)
+,(@time_zone_id, 1711846800, 11)
+,(@time_zone_id, 1729990800, 12)
+,(@time_zone_id, 1743296400, 11)
+,(@time_zone_id, 1761440400, 12)
+,(@time_zone_id, 1774746000, 11)
+,(@time_zone_id, 1792890000, 12)
+,(@time_zone_id, 1806195600, 11)
+,(@time_zone_id, 1824944400, 12)
+,(@time_zone_id, 1837645200, 11)
+,(@time_zone_id, 1856394000, 12)
+,(@time_zone_id, 1869094800, 11)
+,(@time_zone_id, 1887843600, 12)
+,(@time_zone_id, 1901149200, 11)
+,(@time_zone_id, 1919293200, 12)
+,(@time_zone_id, 1932598800, 11)
+,(@time_zone_id, 1950742800, 12)
+,(@time_zone_id, 1964048400, 11)
+,(@time_zone_id, 1982797200, 12)
+,(@time_zone_id, 1995498000, 11)
+,(@time_zone_id, 2014246800, 12)
+,(@time_zone_id, 2026947600, 11)
+,(@time_zone_id, 2045696400, 12)
+,(@time_zone_id, 2058397200, 11)
+,(@time_zone_id, 2077146000, 12)
+,(@time_zone_id, 2090451600, 11)
+,(@time_zone_id, 2108595600, 12)
+,(@time_zone_id, 2121901200, 11)
+,(@time_zone_id, 2140045200, 12)\G
+
+# Query 2: 114.12 QPS, 0.09x concurrency, ID 0x93B0490C6027E6D67E3D4DA357148667 at byte 3352215
+# Scores: V/M = 0.00
+# Time range: 2022-04-16T04:13:10 to 2022-04-16T04:13:26
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         20    1826
+# Exec time     14      1s   291us     7ms   818us     1ms   398us   725us
+# Lock time     26    10ms     2us    97us     5us     9us     4us     3us
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size    11 553.27k     142     776  310.27  511.45  113.76  284.79
+# String:
+# Databases    mysql
+# Hosts        localhost
+# Users        root
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ####################
+#  10ms
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `mysql` LIKE 'time_zone_transition_type'\G
+#    SHOW CREATE TABLE `mysql`.`time_zone_transition_type`\G
+INSERT INTO time_zone_transition_type (Time_zone_id, Transition_type_id, Offset, Is_DST, Abbreviation) VALUES
+ (@time_zone_id, 0, 28656, 0, 'LMT')
+,(@time_zone_id, 1, 28656, 0, 'MMT')
+,(@time_zone_id, 2, 28800, 0, '+08')
+,(@time_zone_id, 3, 32400, 0, '+09')
+,(@time_zone_id, 4, 28800, 0, 'WITA')\G
+
+# Query 3: 114.12 QPS, 0.06x concurrency, ID 0x44EBC9974E0FE0B553B97C7B0FEFCE3D at byte 2327633
+# Scores: V/M = 0.00
+# Time range: 2022-04-16T04:13:10 to 2022-04-16T04:13:26
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         20    1826
+# Exec time      8   886ms   301us     4ms   485us   881us   223us   403us
+# Lock time     24     9ms     3us    38us     4us     8us     3us     3us
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     3 164.38k      76     112   92.18   97.36    5.40   92.72
+# String:
+# Databases    mysql
+# Hosts        localhost
+# Users        root
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ##
+#  10ms
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `mysql` LIKE 'time_zone_name'\G
+#    SHOW CREATE TABLE `mysql`.`time_zone_name`\G
+INSERT INTO time_zone_name (Name, Time_zone_id) VALUES ('posix/Africa/Malabo', @time_zone_id)\G
+
+# Query 4: 114.12 QPS, 0.05x concurrency, ID 0xAA83D87B5B11FC07C50163FB3A1C4E9C at byte 1679
+# Scores: V/M = 0.00
+# Time range: 2022-04-16T04:13:10 to 2022-04-16T04:13:26
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         20    1826
+# Exec time      7   769ms   239us     9ms   421us   761us   283us   348us
+# Lock time     24     9ms     2us   143us     4us     8us     5us     3us
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     1  94.51k      53      53      53      53       0      53
+# String:
+# Databases    mysql
+# Hosts        localhost
+# Users        root
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  #
+#  10ms
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `mysql` LIKE 'time_zone'\G
+#    SHOW CREATE TABLE `mysql`.`time_zone`\G
+INSERT INTO time_zone (Use_leap_seconds) VALUES ('N')\G
+
+# Query 5: 114.12 QPS, 0.02x concurrency, ID 0x98E1098203EF07827B5A8A396BEE8F90 at byte 4155497
+# Scores: V/M = 0.00
+# Time range: 2022-04-16T04:13:10 to 2022-04-16T04:13:26
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         20    1826
+# Exec time      3   323ms    90us    19ms   176us   301us   429us   138us
+# Lock time      0       0       0       0       0       0       0       0
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     1  62.41k      35      35      35      35       0      35
+# String:
+# Databases    mysql
+# Hosts        localhost
+# Users        root
+# Query_time distribution
+#   1us
+#  10us  ##
+# 100us  ################################################################
+#   1ms  #
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+SET @time_zone_id= LAST_INSERT_ID()\G

@@ -6,4 +6,4 @@ RUN mkdir file
 RUN mkdir file/static
 RUN npm ci
 
-ENTRYPOINT ["node", "src/index.js"]
+ENTRYPOINT ["npm", "start"]

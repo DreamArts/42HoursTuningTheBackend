@@ -20,6 +20,7 @@ services:
         dockerfile: Dockerfile
       volumes:
         - ../volume/backend/file:/backend/file
+        - ./backend/src:/backend/src
     frontend:
       build:
         context: ./frontend
@@ -35,3 +36,6 @@ services:
         MYSQL_PASSWORD : "backend"
       volumes:
         - ../volume/mysql:/var/lib/mysql
+        - type: bind
+          source: "./mysql/log"
+          target: "/var/log/mysql"
