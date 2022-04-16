@@ -2,7 +2,7 @@ version: "3.7"
 services:
     nginx:
       build:
-        context: ./localNginx #ローカル開発用です。HTTPSポートは公開しません 
+        context: ./localNginx #ローカル開発用です。HTTPSポートは公開しません
         dockerfile: Dockerfile
       ports:
           - target: 80
@@ -26,3 +26,8 @@ services:
         MYSQL_DATABASE: "app"
         MYSQL_USER: "backend"
         MYSQL_PASSWORD : "backend"
+      platform : linux/amd64
+      volumes:
+        - type: bind
+          source: "./localMysql/log"
+          target: "/var/log/mysql"
