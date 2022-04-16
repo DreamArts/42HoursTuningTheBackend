@@ -30,7 +30,7 @@ const mylog = (obj) => {
 
 app.get('/api/hello', (req, res) => {
   console.log('requested');
-  mylog("hello world")
+  mylog("hello")
   res.send({ response :'World!'})
 })
 
@@ -116,6 +116,7 @@ app.post('/api/client/records/:recordId/comments', async (req, res, next) => {
 })
 
 app.get('/api/client/categories', async (req, res, next) => {
+  console.log("categories")
   try {
     await api.getCategories(req, res);
   } catch(e) {
