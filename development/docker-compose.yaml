@@ -20,6 +20,8 @@ services:
         dockerfile: Dockerfile
       volumes:
         - ../volume/backend/file:/backend/file
+        - ./backend/log:/backend/log
+        - ./backend/src:/backend/src
     frontend:
       build:
         context: ./frontend

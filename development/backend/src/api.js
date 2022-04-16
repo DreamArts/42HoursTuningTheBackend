@@ -1,6 +1,17 @@
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const log4js = require('log4js')
 
+log4js.configure({
+	appenders : {
+	system : {type : 'file', filename : '../log/api.log'}
+	},
+	categories : {
+	default : {appenders : ['system'], level : 'info'},
+	}
+});
+
+const logger = log4js.getLogger('system');
 const jimp = require('jimp');
 
 const mysql = require('mysql2/promise');
@@ -19,25 +30,27 @@ const mysqlOption = {
 };
 const pool = mysql.createPool(mysqlOption);
 
-const mylog = (obj) => {
+const mylog_1 = (obj) => {
   if (Array.isArray(obj)) {
     for (const e of obj) {
       console.log(e);
+	  logger.info(e);
     }
     return;
   }
   console.log(obj);
+  logger.info(obj);
 };
 
 const getLinkedUser = async (headers) => {
   const target = headers['x-app-key'];
-  mylog(target);
+  mylog_1(target);
   const qs = `select * from session where value = ?`;
 
   const [rows] = await pool.query(qs, [`${target}`]);
 
   if (rows.length !== 1) {
-    mylog('セッションが見つかりませんでした。');
+    mylog_1('セッションが見つかりませんでした。');
     return undefined;
   }
 
@@ -56,10 +69,10 @@ const postRecords = async (req, res) => {
     return;
   }
 
-  mylog(user);
+  mylog_1(user);
 
   const body = req.body;
-  mylog(body);
+  mylog_1(body);
 
   let [rows] = await pool.query(
     `select * from group_member where user_id = ?
@@ -68,14 +81,14 @@ const postRecords = async (req, res) => {
   );
 
   if (rows.length !== 1) {
-    mylog('申請者のプライマリ組織の解決に失敗しました。');
+    mylog_1('申請者のプライマリ組織の解決に失敗しました。');
     res.status(400).send();
     return;
   }
 
   const userPrimary = rows[0];
 
-  mylog(userPrimary);
+  mylog_1(userPrimary);
 
   const newId = uuidv4();
 
@@ -120,7 +133,7 @@ const getRecord = async (req, res) => {
   const recordQs = `select * from record where record_id = ?`;
 
   const [recordResult] = await pool.query(recordQs, [`${recordId}`]);
-  mylog(recordResult);
+  mylog_1(recordResult);
 
   if (recordResult.length !== 1) {
     res.status(404).send({});
@@ -186,8 +199,8 @@ const getRecord = async (req, res) => {
 
   const searchItemQs = `select * from record_item_file where linked_record_id = ? order by item_id asc`;
   const [itemResult] = await pool.query(searchItemQs, [line.record_id]);
-  mylog('itemResult');
-  mylog(itemResult);
+  mylog_1('itemResult');
+  mylog_1(itemResult);
 
   const searchFileQs = `select * from file where file_id = ?`;
   for (let i = 0; i < itemResult.length; i++) {
@@ -235,19 +248,19 @@ const tomeActive = async (req, res) => {
 
   const searchMyGroupQs = `select * from group_member where user_id = ?`;
   const [myGroupResult] = await pool.query(searchMyGroupQs, [user.user_id]);
-  mylog(myGroupResult);
+  mylog_1(myGroupResult);
 
   const targetCategoryAppGroupList = [];
   const searchTargetQs = `select * from category_group where group_id = ?`;
 
   for (let i = 0; i < myGroupResult.length; i++) {
     const groupId = myGroupResult[i].group_id;
-    mylog(groupId);
+    mylog_1(groupId);
 
     const [targetResult] = await pool.query(searchTargetQs, [groupId]);
     for (let j = 0; j < targetResult.length; j++) {
       const targetLine = targetResult[j];
-      mylog(targetLine);
+      mylog_1(targetLine);
 
       targetCategoryAppGroupList.push({
         categoryId: targetLine.category_id,
@@ -277,11 +290,11 @@ const tomeActive = async (req, res) => {
   recordCountQs += ' )';
   param.push(limit);
   param.push(offset);
-  mylog(searchRecordQs);
-  mylog(param);
+  mylog_1(searchRecordQs);
+  mylog_1(param);
 
   const [recordResult] = await pool.query(searchRecordQs, param);
-  mylog(recordResult);
+  mylog_1(recordResult);
 
   const items = Array(recordResult.length);
   let count = 0;
@@ -309,7 +322,7 @@ const tomeActive = async (req, res) => {
     };
 
     const line = recordResult[i];
-    mylog(line);
+    mylog_1(line);
     const recordId = recordResult[i].record_id;
     const createdBy = line.created_by;
     const applicationGroup = line.application_group;
@@ -342,7 +355,7 @@ const tomeActive = async (req, res) => {
 
     const [lastResult] = await pool.query(searchLastQs, [user.user_id, recordId]);
     if (lastResult.length === 1) {
-      mylog(updatedAt);
+      mylog_1(updatedAt);
       const updatedAtNum = Date.parse(updatedAt);
       const accessTimeNum = Date.parse(lastResult[0].access_time);
       if (updatedAtNum <= accessTimeNum) {
@@ -394,7 +407,7 @@ const allActive = async (req, res) => {
   const searchRecordQs = `select * from record where status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
 
   const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
-  mylog(recordResult);
+  mylog_1(recordResult);
 
   const items = Array(recordResult.length);
   let count = 0;
@@ -422,7 +435,7 @@ const allActive = async (req, res) => {
     };
 
     const line = recordResult[i];
-    mylog(line);
+    mylog_1(line);
     const recordId = recordResult[i].record_id;
     const createdBy = line.created_by;
     const applicationGroup = line.application_group;
@@ -455,7 +468,7 @@ const allActive = async (req, res) => {
 
     const [lastResult] = await pool.query(searchLastQs, [user.user_id, recordId]);
     if (lastResult.length === 1) {
-      mylog(updatedAt);
+      mylog_1(updatedAt);
       const updatedAtNum = Date.parse(updatedAt);
       const accessTimeNum = Date.parse(lastResult[0].access_time);
       if (updatedAtNum <= accessTimeNum) {
@@ -509,7 +522,7 @@ const allClosed = async (req, res) => {
   const searchRecordQs = `select * from record where status = "closed" order by updated_at desc, record_id asc limit ? offset ?`;
 
   const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
-  mylog(recordResult);
+  mylog_1(recordResult);
 
   const items = Array(recordResult.length);
   let count = 0;
@@ -537,7 +550,7 @@ const allClosed = async (req, res) => {
     };
 
     const line = recordResult[i];
-    mylog(line);
+    mylog_1(line);
     const recordId = recordResult[i].record_id;
     const createdBy = line.created_by;
     const applicationGroup = line.application_group;
@@ -570,7 +583,7 @@ const allClosed = async (req, res) => {
 
     const [lastResult] = await pool.query(searchLastQs, [user.user_id, recordId]);
     if (lastResult.length === 1) {
-      mylog(updatedAt);
+      mylog_1(updatedAt);
       const updatedAtNum = Date.parse(updatedAt);
       const accessTimeNum = Date.parse(lastResult[0].access_time);
       if (updatedAtNum <= accessTimeNum) {
@@ -624,7 +637,7 @@ const mineActive = async (req, res) => {
   const searchRecordQs = `select * from record where created_by = ? and status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
 
   const [recordResult] = await pool.query(searchRecordQs, [user.user_id, limit, offset]);
-  mylog(recordResult);
+  mylog_1(recordResult);
 
   const items = Array(recordResult.length);
   let count = 0;
@@ -652,7 +665,7 @@ const mineActive = async (req, res) => {
     };
 
     const line = recordResult[i];
-    mylog(line);
+    mylog_1(line);
     const recordId = recordResult[i].record_id;
     const createdBy = line.created_by;
     const applicationGroup = line.application_group;
@@ -685,7 +698,7 @@ const mineActive = async (req, res) => {
 
     const [lastResult] = await pool.query(searchLastQs, [user.user_id, recordId]);
     if (lastResult.length === 1) {
-      mylog(updatedAt);
+      mylog_1(updatedAt);
       const updatedAtNum = Date.parse(updatedAt);
       const accessTimeNum = Date.parse(lastResult[0].access_time);
       if (updatedAtNum <= accessTimeNum) {
@@ -754,7 +767,7 @@ const getComments = async (req, res) => {
   const commentQs = `select * from record_comment where linked_record_id = ? order by created_at desc`;
 
   const [commentResult] = await pool.query(commentQs, [`${recordId}`]);
-  mylog(commentResult);
+  mylog_1(commentResult);
 
   const commentList = Array(commentResult.length);
 
@@ -796,7 +809,7 @@ const getComments = async (req, res) => {
   }
 
   for (const row of commentList) {
-    mylog(row);
+    mylog_1(row);
   }
 
   res.send({ items: commentList });
@@ -845,7 +858,7 @@ const getCategories = async (req, res) => {
   const [rows] = await pool.query(`select * from category`);
 
   for (const row of rows) {
-    mylog(row);
+    mylog_1(row);
   }
 
   const items = {};
@@ -868,7 +881,7 @@ const postFiles = async (req, res) => {
   }
 
   const base64Data = req.body.data;
-  mylog(base64Data);
+  mylog_1(base64Data);
 
   const name = req.body.name;
 
@@ -880,8 +893,8 @@ const postFiles = async (req, res) => {
   fs.writeFileSync(`${filePath}${newId}_${name}`, binary);
 
   const image = await jimp.read(fs.readFileSync(`${filePath}${newId}_${name}`));
-  mylog(image.bitmap.width);
-  mylog(image.bitmap.height);
+  mylog_1(image.bitmap.width);
+  mylog_1(image.bitmap.height);
 
   const size = image.bitmap.width < image.bitmap.height ? image.bitmap.width : image.bitmap.height;
   await image.cover(size, size);
@@ -913,9 +926,9 @@ const getRecordItemFile = async (req, res) => {
   }
 
   const recordId = req.params.recordId;
-  mylog(recordId);
+  mylog_1(recordId);
   const itemId = Number(req.params.itemId);
-  mylog(itemId);
+  mylog_1(itemId);
 
   const [rows] = await pool.query(
     `select f.name, f.path from record_item_file r
@@ -933,13 +946,13 @@ const getRecordItemFile = async (req, res) => {
     res.status(404).send({});
     return;
   }
-  mylog(rows[0]);
+  mylog_1(rows[0]);
 
   const fileInfo = rows[0];
 
   const data = fs.readFileSync(fileInfo.path);
   const base64 = data.toString('base64');
-  mylog(base64);
+  mylog_1(base64);
 
   res.send({ data: base64, name: fileInfo.name });
 };
@@ -955,9 +968,9 @@ const getRecordItemFileThumbnail = async (req, res) => {
   }
 
   const recordId = req.params.recordId;
-  mylog(recordId);
+  mylog_1(recordId);
   const itemId = Number(req.params.itemId);
-  mylog(itemId);
+  mylog_1(itemId);
 
   const [rows] = await pool.query(
     `select f.name, f.path from record_item_file r
@@ -975,13 +988,13 @@ const getRecordItemFileThumbnail = async (req, res) => {
     res.status(404).send({});
     return;
   }
-  mylog(rows[0]);
+  mylog_1(rows[0]);
 
   const fileInfo = rows[0];
 
   const data = fs.readFileSync(fileInfo.path);
   const base64 = data.toString('base64');
-  mylog(base64);
+  mylog_1(base64);
 
   res.send({ data: base64, name: fileInfo.name });
 };
