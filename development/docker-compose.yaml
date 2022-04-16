@@ -36,3 +36,6 @@ services:
         MYSQL_PASSWORD : "backend"
       volumes:
         - ../volume/mysql:/var/lib/mysql
+        - type: bind
+          source: "./mysql/log"
+          target: "/var/log/mysql"
