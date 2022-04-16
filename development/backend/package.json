@@ -10,6 +10,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "jimp": "^0.16.1",
+    "log4js": "^6.4.5",
     "mysql2": "^2.3.3",
     "uuid": "^8.3.2"
   },
