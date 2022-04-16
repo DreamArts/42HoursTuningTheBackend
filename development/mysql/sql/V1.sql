@@ -1,11 +1,3 @@
-ALTER TABLE category ADD INDEX category_session (value);
-ALTER TABLE category_group ADD INDEX category_group_session (value);
-ALTER TABLE file ADD INDEX file_session (value);
-ALTER TABLE group_info ADD INDEX group_info_session (value);
-ALTER TABLE group_member ADD INDEX group_member_session (value);
-ALTER TABLE record  ADD INDEX record _session (value);
-ALTER TABLE record_comment ADD INDEX record_comment_session (value);
-ALTER TABLE record_item_file ADD INDEX record_item_file_session (value);
-ALTER TABLE record_last_access ADD INDEX record_last_access_session (value);
-ALTER TABLE session ADD INDEX session_session (value);
-ALTER TABLE user  ADD INDEX user _session (value);
+ALTER TABLE session ADD INDEX index_session (value);
+ALTER TABLE record_comment ADD INDEX index_record_comment (linked_record_id);
+
