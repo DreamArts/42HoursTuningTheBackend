@@ -84,3 +84,5 @@ CREATE TABLE `file` (
     `name` VARCHAR(256) NOT NULL,
     PRIMARY KEY (`file_id`)
 );
+
+ALTER TABLE session ADD INDEX session_hayaku(value);
