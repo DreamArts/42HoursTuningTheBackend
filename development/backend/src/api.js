@@ -248,8 +248,8 @@ const tomeActive = async (req, res) => {
 
   const searchRecordQs =`
   select
-	  r.record_id as record_id,
-	  r.title as title,
+	  r.record_id,
+	  r.title,
 	  r.application_group,
 	  gi.name as application_group_name,
 	  r.created_by,
@@ -260,7 +260,20 @@ const tomeActive = async (req, res) => {
 	  rif.item_id as thumb_nail_item_id,
 	  r.updated_at
   from
-	  record as r
+	  (select 
+		  record_id,
+		  title,
+		  application_group,
+		  created_by,
+		  created_at,
+		  updated_at
+	  from
+		  record
+	  where
+		  status = "open"
+	  and
+		  (category_id, application_group) in (${searchTargetCategoryGroupQs})
+	  limit ? offset ?) as r
   left join
 	  group_info as gi
   on
@@ -271,45 +284,39 @@ const tomeActive = async (req, res) => {
 	  r.created_by = u.user_id
   left join
 	  (select
-      linked_record_id,
-      count(linked_record_id) as comment_count
-    from
-      record_comment
-    group by
-      linked_record_id) as rc
+		  linked_record_id,
+		  count(linked_record_id) as comment_count
+	  from
+		  record_comment
+	  group by
+		  linked_record_id) as rc
   on
 	  r.record_id = rc.linked_record_id
   left join
 	  (select
-      record_id,
-      access_time
-    from
-      record_last_access
-    where user_id = ?) as rla
+		  record_id,
+		  access_time
+	  from
+		  record_last_access
+	  where user_id = ?) as rla
   on
 	  r.record_id = rla.record_id
   left join
 	  (select
-      linked_record_id,
-      substring_index(group_concat(item_id order by item_id asc separator ','), ',', 1) as item_id
-    from
-      record_item_file
-    group by
-      linked_record_id) as rif
+		  linked_record_id,
+		  substring_index(group_concat(item_id order by item_id asc separator ','), ',', 1) as item_id
+	  from
+		  record_item_file
+	  group by
+		linked_record_id) as rif
   on
 	  r.record_id = rif.linked_record_id
-  where
-	  r.status = "open"
-  and
-	  (category_id, application_group) in (${searchTargetCategoryGroupQs})
   order by
 	  r.updated_at desc,
-	  r.record_id
-  limit ? offset ?`;
+	  r.record_id`;
   
   mylog(searchRecordQs);
-  const [recordResults] = await pool.query(searchRecordQs, [user.user_id, user.user_id, limit, offset]);
-
+  const [recordResults] = await pool.query(searchRecordQs, [user.user_id, limit, offset, user.user_id]);
   mylog([user.user_id, user.user_id, limit, offset]);
   mylog(recordResults);
   const items = recordResults.map(result => {
