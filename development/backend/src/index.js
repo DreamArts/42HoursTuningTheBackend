@@ -21,7 +21,6 @@ const mylog = (obj) => {
 	if (Array.isArray(obj)) {
 	  for (const e of obj) {
 		console.log(e);
-		logger.info(e);
 	  }
 	  return;
 	}
