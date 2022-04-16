@@ -309,31 +309,35 @@ const tomeActive = async (req, res) => {
   
   mylog(searchRecordQs);
   const [recordResults] = await pool.query(searchRecordQs, [user.user_id, user.user_id, limit, offset]);
-  mylog([user.user_id, user.user_id, limit, offset]);
-  mylog(recordResult);
 
+  mylog([user.user_id, user.user_id, limit, offset]);
+  mylog(recordResults);
   const items = recordResults.map(result => {
-    mylog(result);
+    let isUnConfirmed = true;
+    const updatedAtNum = Date.parse(result.updated_at);
+    const accessTimeNum = Date.parse(result.access_time);
+    if (!!(accessTimeNum) && updatedAtNum <= accessTimeNum)
+      isUnConfirmed = false;
+    
     return {
-      recordId: result.record_id,
-      title: result.title,
-      applicationGroup: result.application_group,
-      applicationGroupName: result.application_group_name,
-      createdBy: result.created_by,
-      createdByName: result.created_by_name,
+      recordId: result.record_id || '',
+      title: result.title || '',
+      applicationGroup: result.application_group || '',
+      applicationGroupName: result.application_group_name || null,
+      createdBy: result.created_by || null,
+      createdByName: result.created_by_name || null,
       createAt: result.created_at,
       commentCount: result.comment_count || 0,
-      isUnConfirmed: !result.access_time? true : (updatedAtNum > accessTimeNum),
-      thumbNailItemId: null,
+      isUnConfirmed: isUnConfirmed,
+      thumbNailItemId: Number(result.thumb_nail_item_id),
       updatedAt: result.updated_at,
     };
   });
-
+  mylog(items);
   const recordCountQs = `select count(*) from record where status = "open" and (category_id, application_group) in (${searchTargetCategoryGroupQs})`;
   const [recordCountResult] = await pool.query(recordCountQs, [user.user_id]);
-  if (recordCountResult.length === 1) {
+  if (recordCountResult.length === 1)
     count = recordCountResult[0]['count(*)'];
-  }
   res.send({ count, items });
 };
 
