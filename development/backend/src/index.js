@@ -9,7 +9,7 @@ const log4js = require('log4js')
 
 log4js.configure({
 	appenders : {
-	system : {type : 'file', filename : 'system.log'}
+	system : {type : 'file', filename : '../log/index.log'}
 	},
 	categories : {
 	default : {appenders : ['system'], level : 'info'},
@@ -31,7 +31,7 @@ const mylog = (obj) => {
 
 app.get('/api/hello', (req, res) => {
   console.log('requested');
-  mylog("World")
+  mylog("hello world")
   res.send({ response :'World!'})
 })
 
