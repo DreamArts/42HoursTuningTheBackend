@@ -74,7 +74,7 @@ const postRecords = async (req, res) => {
   mylog_1(body);
 
   let [rows] = await pool.query(
-    `select * from group_member where user_id = ?
+    `select group_id from group_member where user_id = ?
     AND is_primary = true`,
     [user.user_id],
   );
@@ -129,7 +129,7 @@ const getRecord = async (req, res) => {
 
   const recordId = req.params.recordId;
 
-  const recordQs = `select * from record where record_id = ?`;
+  const recordQs = `select record_id, status, title, detail, category_id, application_group, created_by, created_at from record where record_id = ?`;
 
   const [recordResult] = await pool.query(recordQs, [`${recordId}`]);
   mylog_1(recordResult);
@@ -138,7 +138,7 @@ const getRecord = async (req, res) => {
     res.status(404).send({});
     return;
   }
-
+  
   let recordInfo = {
     recordId: '',
     status: '',
@@ -155,10 +155,10 @@ const getRecord = async (req, res) => {
     files: [],
   };
 
-  const searchPrimaryGroupQs = `select * from group_member where user_id = ? and is_primary = true`;
-  const searchUserQs = `select * from user where user_id = ?`;
-  const searchGroupQs = `select * from group_info where group_id = ?`;
-  const searchCategoryQs = `select * from category where category_id = ?`;
+  const searchPrimaryGroupQs = `select group_id from group_member where user_id = ? and is_primary = true`;
+  const searchUserQs = `select name from user where user_id = ?`;
+  const searchGroupQs = `select name from group_info where group_id = ?`;
+  const searchCategoryQs = `select name from category where category_id = ?`;
 
   const line = recordResult[0];
 
@@ -196,12 +196,12 @@ const getRecord = async (req, res) => {
   recordInfo.createdBy = line.created_by;
   recordInfo.createdAt = line.created_at;
 
-  const searchItemQs = `select * from record_item_file where linked_record_id = ? order by item_id asc`;
+  const searchItemQs = `select item_id, linked_file_id from record_item_file where linked_record_id = ? order by item_id asc`;
   const [itemResult] = await pool.query(searchItemQs, [line.record_id]);
   mylog_1('itemResult');
   mylog_1(itemResult);
 
-  const searchFileQs = `select * from file where file_id = ?`;
+  const searchFileQs = `select name from file where file_id = ?`;
   for (let i = 0; i < itemResult.length; i++) {
     const item = itemResult[i];
     const [fileResult] = await pool.query(searchFileQs, [item.linked_file_id]);
